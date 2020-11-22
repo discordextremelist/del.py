@@ -1,15 +1,15 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
   name = 'DEL.py',
   packages=['delpy'],
-  version = '0.0.5',
+  version = '0.0.1',
   license='MIT',
   description = 'API wrapper for discordextremelist',
   author = 'Moksej',
   author_email = 'moksej@gmail.com',
-  url = 'https://github.com/TheMoksej/delpy-test',
-  download_url = 'https://github.com/TheMoksej/delpy-test.git',
+  url = 'https://github.com/discordextremelist/del.py',
+  download_url = 'https://github.com/discordextremelist/del.py.git',
   install_requires=['aiohttp'],
   classifiers=[
     'License :: OSI Approved :: MIT License',
