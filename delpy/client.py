@@ -21,20 +21,19 @@ class Client:
         :param shardCount: Shard count (optional)
         """
 
-        headers = {"Authorization": self.token, "Content-Type": 'application/json'}
+        head = {"Authorization": self.token, "Content-Type": 'application/json'}
         if not self.token:
             raise errors.NoToken("The token is missing.")
 
-        data = json.dumps({'guildCount': guildCount, 'shardCount': shardCount})
+        to_post = json.dumps({'guildCount': guildCount, 'shardCount': shardCount})
         if not shardCount:
-            data = json.dumps({'guildCount': guildCount})
+            to_post = json.dumps({'guildCount': guildCount})
 
-        async with self.session as session:
-            async with session.post(self.baseurl+"bot/{0}/stats".format(botid), headers=headers, data=data) as r:
-                result = await r.json()
-
-                if result['error']:
-                    raise errors.InvalidStats(f"Failed to post stats! Result:\n{result}")
+        r = await self.session.post(self.baseurl+"bot/{0}/stats".format(botid), headers=head, data=to_post)
+        result = json.loads(await r.text())
+        
+        if result['error']:
+            raise errors.InvalidStats(f"Failed to post stats! Result:\n{result}")
     
     async def get_website_stats(self):
         """
