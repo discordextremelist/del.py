@@ -1,4 +1,5 @@
 import json
+import time
 from aiohttp import ClientSession
 from asyncio import get_event_loop, AbstractEventLoop
 from . import errors
@@ -42,8 +43,10 @@ class Client:
         :return WebsiteStats: Website statistics
         """
 
+        start_time = time.time()
         r = await self.session.get(self.baseurl+"/stats")
         data = json.loads(await r.text())
+        data['time_taken'] = (time.time() - start_time) * 1000
         return data
     
     async def get_website_health(self):
@@ -53,8 +56,10 @@ class Client:
         :return WebsiteHealth: Website health
         """
 
+        start_time = time.time()
         r = await self.session.get(self.baseurl+"/health")
         data = json.loads(await r.text())
+        data['time_taken'] = (time.time() - start_time) * 1000
         return data
 
     async def get_bot_info(self, botid: str):
@@ -65,8 +70,10 @@ class Client:
         :return Bot: Bot that was fetched
         """
 
+        start_time = time.time()
         r = await self.session.get(self.baseurl+"bot/{0}".format(botid))
         data = json.loads(await r.text())
+        data['time_taken'] = (time.time() - start_time) * 1000
         return data
     
     async def get_server_info(self, serverid: str):
@@ -77,8 +84,10 @@ class Client:
         :return Server: Server that was fetched
         """
 
+        start_time = time.time()
         r = await self.session.get(self.baseurl+"server/{0}".format(serverid))
         data = json.loads(await r.text())
+        data['time_taken'] = (time.time() - start_time) * 1000
         return data
     
     async def get_template_info(self, templateid: str):
@@ -89,8 +98,10 @@ class Client:
         :return Template: Template that was fetched
         """
 
+        start_time = time.time()
         r = await self.session.get(self.baseurl+"template/{0}".format(templateid))
         data = json.loads(await r.text())
+        data['time_taken'] = (time.time() - start_time) * 1000
         return data
     
     async def get_user_info(self, userid: str):
@@ -101,6 +112,8 @@ class Client:
         :return User: User that was fetched
         """
 
+        start_time = time.time()
         r = await self.session.get(self.baseurl+"user/{0}".format(userid))
         data = json.loads(await r.text())
+        data['time_taken'] = (time.time() - start_time) * 1000
         return data
