@@ -8,8 +8,8 @@ setup(
   description = 'API wrapper for discordextremelist',
   author = 'Moksej',
   author_email = 'moksej@gmail.com',
-  url = 'https://github.com/discordextremelist/del.py',
-  download_url = 'https://github.com/discordextremelist/del.py.git',
+  url = 'https://github.com/TheMoksej/delpy-test',
+  download_url = 'https://github.com/TheMoksej/delpy-test.git',
   install_requires=['aiohttp'],
   classifiers=[
     'License :: OSI Approved :: MIT License',

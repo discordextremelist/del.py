@@ -1,5 +1,6 @@
 import json
 import time
+import discord
 from aiohttp import ClientSession
 from asyncio import get_event_loop, AbstractEventLoop
 from . import errors
@@ -10,14 +11,16 @@ class Client:
     API wrapper for discordextremelist.xyz
     """
 
-    def __init__(self, token: str = None, *, baseurl: str = "https://api.discordextremelist.xyz/v2/", loop: AbstractEventLoop=None):
+    def __init__(self, bot: discord.Client = None, token: str = None, *, baseurl: str = "https://api.discordextremelist.xyz/v2/", loop: AbstractEventLoop=None):
+        self.bot = bot
         self.token = token
         self.baseurl = baseurl
         self.session = ClientSession(loop=loop if loop else get_event_loop())
 
-    async def post_stats(self, botid: str, guildCount: int, shardCount: int = None):
+    async def post_stats(self, guildCount: int, shardCount: int = None):
         """
-        :param botid: Bot to post server & shard count on
+        Post bot statistics to the API
+
         :param guildCount: Server count
         :param shardCount: Shard count (optional)
         """
@@ -30,7 +33,7 @@ class Client:
         if not shardCount:
             to_post = json.dumps({'guildCount': guildCount})
 
-        r = await self.session.post(self.baseurl+"bot/{0}/stats".format(botid), headers=head, data=to_post)
+        r = await self.session.post(self.baseurl+"bot/{0}/stats".format(self.bot.user.id), headers=head, data=to_post)
         result = json.loads(await r.text())
         
         if result['error']:

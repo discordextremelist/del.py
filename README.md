@@ -21,7 +21,7 @@ class discordextremelist(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.update_stats.start()
-        self.delapi = delpy.Client("token", loop=bot.loop)  # you can get token from your bot page on DEL
+        self.delapi = delpy.Client(self.bot, "token", loop=bot.loop)  # you can get the token from your bot's page on DEL
 
     def cog_unload(self):
         self.update_stats.cancel()
@@ -29,7 +29,7 @@ class discordextremelist(commands.Cog):
     @tasks.loop(minutes=30.0)
     async def update_stats(self):
         try:
-            await self.delapi.post_stats(botid=str(self.bot.user.id), guildCount=len(self.bot.guilds), shardCount=len(self.bot.shards))  # You can remove shardCount
+            await self.delapi.post_stats(guildCount=len(self.bot.guilds), shardCount=len(self.bot.shards))  # shardCount is optional
         except Exception as e:
             print(e)
 
