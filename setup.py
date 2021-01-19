@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
   name = 'DEL.py',
   packages=['delpy'],
-  version = '0.1',
+  version = '0.3',
   license='MIT',
   description = 'API wrapper for discordextremelist',
   author = 'Moksej',
