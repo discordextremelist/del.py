@@ -79,4 +79,4 @@ def setup(bot):
     bot.add_cog(discordextremelist(bot))
 ```
 
-### If you're lost, do not hesitate and join [del server](https://discord.gg/WeCer3J) where you can ask for help in #development
+### If you're lost, do not hesitate and join the [DEL server](https://discord.gg/WeCer3J), where you can ask for help in #development.
