@@ -6,16 +6,16 @@
 ## License
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdiscordextremelist%2Fdel.py.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdiscordextremelist%2Fdel.py?ref=badge_large)
 
-# Installation
+## Installation
 
-### pypi (recommended) 
-#### `pip install del.py`
-### source
-#### `pip install git+https://github.com/discordextremelist/del.py`
+#### pypi (recommended) 
+##### `pip install del.py`
+#### source
+##### `pip install git+https://github.com/discordextremelist/del.py`
 
-# Code Examples
+## Code Examples
 
-## Post bot stats (server count, shard count): *you might need to change loop*
+### Post bot stats (server count, shard count): *you might need to change loop*
 
 ```python
 import delpy
@@ -42,7 +42,7 @@ def setup(bot):
     bot.add_cog(discordextremelist(bot))
 ```
 
-## Get server/bot/template/user information
+### Get server/bot/template/user information
 
 ```python
 import delpy
@@ -63,7 +63,7 @@ def setup(bot):
     bot.add_cog(discordextremelist(bot))
 ```
 
-## Get website statistics/health
+### Get website statistics/health
 
 ```python
 import delpy
@@ -84,5 +84,5 @@ def setup(bot):
     bot.add_cog(discordextremelist(bot))
 ```
 
-### If you're lost, do not hesitate and join the [DEL server](https://discord.gg/WeCer3J), where you can ask for help in #development.
+**If you're lost, do not hesitate and join the [DEL server](https://discord.gg/WeCer3J), where you can ask for help in #development.**
 
