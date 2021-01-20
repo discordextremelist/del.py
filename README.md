@@ -3,7 +3,7 @@
 
 # Installation
 
-### pypi (recommended) (not on pypi yet)
+### pypi (recommended) 
 #### `pip install del.py`
 ### source
 #### `pip install git+https://github.com/discordextremelist/del.py`
