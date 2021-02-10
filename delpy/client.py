@@ -51,7 +51,7 @@ class Client:
         if data['error']:
             raise errors.HTTPException(raised_error=data)
 
-        data['time_taken'] = {(time.time() - start_time)}
+        data['time_taken'] = {(time.time() - start_time)} * 1000
         return data
     
     async def get_website_health(self):
@@ -67,7 +67,7 @@ class Client:
         if data['error']:
             raise errors.HTTPException(raised_error=data)
 
-        data['time_taken'] = {(time.time() - start_time)}
+        data['time_taken'] = {(time.time() - start_time)} * 1000
         return data
 
     async def get_bot_info(self, botid: str):
@@ -84,7 +84,7 @@ class Client:
         if data['error']:
             raise errors.HTTPException(raised_error=data)
 
-        data['time_taken'] = {(time.time() - start_time)}
+        data['time_taken'] = {(time.time() - start_time)} * 1000
         return data
     
     async def get_server_info(self, serverid: str):
@@ -101,7 +101,7 @@ class Client:
         if data['error']:
             raise errors.HTTPException(raised_error=data)
 
-        data['time_taken'] = {(time.time() - start_time)}
+        data['time_taken'] = {(time.time() - start_time)} * 1000
         return data
     
     async def get_template_info(self, templateid: str):
@@ -118,7 +118,7 @@ class Client:
         if data['error']:
             raise errors.HTTPException(raised_error=data)
 
-        data['time_taken'] = {(time.time() - start_time)}
+        data['time_taken'] = {(time.time() - start_time)} * 1000
         return data
     
     async def get_user_info(self, userid: str):
@@ -135,5 +135,5 @@ class Client:
         if data['error']:
             raise errors.HTTPException(raised_error=data)
 
-        data['time_taken'] = {(time.time() - start_time)}
+        data['time_taken'] = {(time.time() - start_time)} * 1000
         return data
