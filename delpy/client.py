@@ -27,17 +27,16 @@ class Client:
 
         head = {"Authorization": self.token, "Content-Type": 'application/json'}
         if not self.token:
-            raise errors.NoToken("The token is missing.")
+            raise errors.Unauthorized("The token is either invalid or missing.")
 
         to_post = json.dumps({'guildCount': guildCount, 'shardCount': shardCount})
         if not shardCount:
             to_post = json.dumps({'guildCount': guildCount})
-
         r = await self.session.post(self.baseurl+"bot/{0}/stats".format(self.bot.user.id), headers=head, data=to_post)
         result = json.loads(await r.text())
         
         if result['error']:
-            raise errors.InvalidStats(f"Failed to post stats! Result:\n{result}")
+            raise errors.HTTPException(raised_error=result)
     
     async def get_website_stats(self):
         """
@@ -47,9 +46,12 @@ class Client:
         """
 
         start_time = time.time()
-        r = await self.session.get(self.baseurl+"/stats")
+        r = await self.session.get(self.baseurl+"stats")
         data = json.loads(await r.text())
-        data['time_taken'] = (time.time() - start_time) * 1000
+        if data['error']:
+            raise errors.HTTPException(raised_error=data)
+
+        data['time_taken'] = {(time.time() - start_time)} * 1000
         return data
     
     async def get_website_health(self):
@@ -60,9 +62,12 @@ class Client:
         """
 
         start_time = time.time()
-        r = await self.session.get(self.baseurl+"/health")
+        r = await self.session.get(self.baseurl+"health")
         data = json.loads(await r.text())
-        data['time_taken'] = (time.time() - start_time) * 1000
+        if data['error']:
+            raise errors.HTTPException(raised_error=data)
+
+        data['time_taken'] = {(time.time() - start_time)} * 1000
         return data
 
     async def get_bot_info(self, botid: str):
@@ -76,7 +81,10 @@ class Client:
         start_time = time.time()
         r = await self.session.get(self.baseurl+"bot/{0}".format(botid))
         data = json.loads(await r.text())
-        data['time_taken'] = (time.time() - start_time) * 1000
+        if data['error']:
+            raise errors.HTTPException(raised_error=data)
+
+        data['time_taken'] = {(time.time() - start_time)} * 1000
         return data
     
     async def get_server_info(self, serverid: str):
@@ -90,7 +98,10 @@ class Client:
         start_time = time.time()
         r = await self.session.get(self.baseurl+"server/{0}".format(serverid))
         data = json.loads(await r.text())
-        data['time_taken'] = (time.time() - start_time) * 1000
+        if data['error']:
+            raise errors.HTTPException(raised_error=data)
+
+        data['time_taken'] = {(time.time() - start_time)} * 1000
         return data
     
     async def get_template_info(self, templateid: str):
@@ -104,7 +115,10 @@ class Client:
         start_time = time.time()
         r = await self.session.get(self.baseurl+"template/{0}".format(templateid))
         data = json.loads(await r.text())
-        data['time_taken'] = (time.time() - start_time) * 1000
+        if data['error']:
+            raise errors.HTTPException(raised_error=data)
+
+        data['time_taken'] = {(time.time() - start_time)} * 1000
         return data
     
     async def get_user_info(self, userid: str):
@@ -118,5 +132,8 @@ class Client:
         start_time = time.time()
         r = await self.session.get(self.baseurl+"user/{0}".format(userid))
         data = json.loads(await r.text())
-        data['time_taken'] = (time.time() - start_time) * 1000
+        if data['error']:
+            raise errors.HTTPException(raised_error=data)
+
+        data['time_taken'] = {(time.time() - start_time)} * 1000
         return data
