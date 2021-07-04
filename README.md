@@ -1,82 +1,33 @@
-# DEL.py
-#### The official Python Library for the [discordextremelist.xyz](https://discordextremelist.xyz) API
+---
+description: >-
+  Change log of Discord Extreme List API wrapper in python, if you need help, do
+  not hesitate to join the DEL server: https://discord.gg/WeCer3J
+---
 
-# Installation
+# Change Log
 
-### pypi (recommended) (not on pypi yet)
-#### `pip install del.py`
-### source
-#### `pip install git+https://github.com/discordextremelist/del.py`
+## 1.0.0
 
-# Code Examples
+### Initial release
 
-## Post bot stats (server count, shard count): *you might need to change loop*
+* The initial release of DEL.py
 
-```python
-import delpy
+## 1.0.1
 
-from discord.ext import commands, tasks
+### Fixed
 
-class discordextremelist(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.update_stats.start()
-        self.delapi = delpy.Client(self.bot, "token", loop=bot.loop)  # you can get the token from your bot's page on DEL
+* The error that got raised when returning the data from the API
 
-    def cog_unload(self):
-        self.update_stats.cancel()
+## 1.1.0
 
-    @tasks.loop(minutes=30.0)
-    async def update_stats(self):
-        try:
-            await self.delapi.post_stats(guildCount=len(self.bot.guilds), shardCount=len(self.bot.shards))  # shardCount is optional
-        except Exception as e:
-            print(e)
+### Added
 
-def setup(bot):
-    bot.add_cog(discordextremelist(bot))
-```
+* Automatic loop to post the data to the API
+* Better control over rate-limit, you now shouldn't get rate-limited even if you tried to with the package
+* Logger which you can access through the logging module called "del.py"
+* Better error handler
 
-## Get server/bot/template/user information
+### Changed
 
-```python
-import delpy
+* Format of the errors that get raised
 
-from discord.ext import commands
-
-class discordextremelist(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.delapi = delpy.Client(loop=bot.loop)  # you might need to change loop
-    
-    # you can either make a command or anything you want
-    # you'll need to use this line inside your command though
-    # data = await self.delapi.get_{option}_info("<id goes here>")
-    # valid options: server, bot, template, user
-
-def setup(bot):
-    bot.add_cog(discordextremelist(bot))
-```
-
-## Get website statistics/health
-
-```python
-import delpy
-
-from discord.ext import commands
-
-class discordextremelist(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.delapi = delpy.Client(loop=bot.loop)  # you might need to change loop
-    
-    # you can either make a command or anything you want
-    # you'll need to use this line inside your command though
-    # data = await self.delapi.get_website_{option}()
-    # valid options: health, stats
-
-def setup(bot):
-    bot.add_cog(discordextremelist(bot))
-```
-
-### If you're lost, do not hesitate and join the [DEL server](https://discord.gg/WeCer3J), where you can ask for help in #development.
