@@ -16,7 +16,7 @@ Client class for the wrapper
 | :--- | :--- | :--- |
 | bot | discord.Client | Only when posting |
 | token | str | Only when posting |
-| loop | ClientSession, EventLoop | No |
+| loop | AbstractEventLoop | No |
 
 ## delpy.Client\(\).start\_loop\(\*args\) -&gt; None
 
