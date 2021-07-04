@@ -30,4 +30,3 @@ description: >-
 ### Changed
 
 * Format of the errors that get raised
-
