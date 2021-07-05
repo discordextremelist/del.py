@@ -80,7 +80,6 @@ class Client:
             raise errors.HTTPException(raised_error="Discord Extreme List server responded with status that isn't 200 OK", status=response.status)
         elif response.status == 200:
             ratelimit_header = response.headers.get("X-RateLimit-Remaining", None)
-            print(ratelimit_header)
             if ratelimit_header and int(ratelimit_header) <= 2:  # 2 to be safe
                 self.hit_ratelimit = True
             pass
