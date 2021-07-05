@@ -60,13 +60,13 @@ class Client:
 
         self._loop_task.cancel()
 
-    async def ratelimit(self, response):
+    async def ratelimit(self, response) -> None:
         self.logger.warning("You have hit the ratelimit, will wait out so you wouldn't *hopefully* get api banned.")
         try:
-            time = (datetime.utcfromtimestamp(response.headers.get("X-Ratelimit-Resets", None) - datetime.utcnow()).total_seconds())
-            await asyncio.sleep(time)
+            time = (datetime.utcfromtimestamp(int(response.headers.get("X-Ratelimit-Reset")) / 1000) - datetime.utcnow()).total_seconds()
+            await asyncio.sleep(time)  # for some reason synchronization with the API is stupidly off, got the time in the past multiple times.
         except (ValueError, TypeError):
-            await asyncio.sleep(30)  # in case the unix timestamp is too big or nonetype then wait for 30 seconds.
+            await asyncio.sleep(30)  # in case the unix timestamp is too big or nonetype then wait for 30 seconds forceully.
         self.hit_ratelimit = False
         self.logger.info("Waited out the time, continuing to interact with the API")
 
@@ -80,11 +80,12 @@ class Client:
             raise errors.HTTPException(raised_error="Discord Extreme List server responded with status that isn't 200 OK", status=response.status)
         elif response.status == 200:
             ratelimit_header = response.headers.get("X-RateLimit-Remaining", None)
-            if ratelimit_header and int(ratelimit_header) == 2:  # 2 to be safe
+            print(ratelimit_header)
+            if ratelimit_header and int(ratelimit_header) <= 2:  # 2 to be safe
                 self.hit_ratelimit = True
             pass
 
-    async def post_stats(self, guildCount: int, shardCount: int = None):
+    async def post_stats(self, guildCount: int, shardCount: int = None) -> [errors.HTTPException, None]:
         """
         Post bot statistics to the API
 
@@ -111,7 +112,7 @@ class Client:
         else:
             self.logger.info(f"Successfully posted stats to the API ({len(self.bot.guilds)} Guild(s) & {len(self.bot.shards)} Shard(s))")
 
-    async def get_website_stats(self):
+    async def get_website_stats(self) -> [errors.HTTPException, dict]:
         """
         Get website statistics
 
@@ -122,9 +123,6 @@ class Client:
         r = await self.session.get(self.baseurl + "stats")
         await self._response(r)
 
-        if self.hit_ratelimit:
-            await self.ratelimit(response=r)
-
         data = json.loads(await r.text())
         if data['error']:
             raise errors.HTTPException(raised_error=data)
@@ -132,7 +130,7 @@ class Client:
         data['time_taken'] = (time.time() - start_time) * 1000
         return data
 
-    async def get_website_health(self):
+    async def get_website_health(self) -> [errors.HTTPException, dict]:
         """
         Get website health
 
@@ -143,18 +141,14 @@ class Client:
         r = await self.session.get(self.baseurl + "health")
         await self._response(r)
 
-        if self.hit_ratelimit:
-            await self.ratelimit(response=r)
-
         data = json.loads(await r.text())
         if data['error']:
             raise errors.HTTPException(raised_error=data)
 
         data['time_taken'] = (time.time() - start_time) * 1000
-
         return data
 
-    async def get_bot_info(self, botid: int):
+    async def get_bot_info(self, botid: int) -> [errors.HTTPException, dict]:
         """
         Get a bot listed on discordextremelist.xyz
 
@@ -166,9 +160,6 @@ class Client:
         r = await self.session.get(self.baseurl + "bot/{0}".format(botid))
         await self._response(r)
 
-        if self.hit_ratelimit:
-            await self.ratelimit(response=r)
-
         data = json.loads(await r.text())
         if data['error']:
             raise errors.HTTPException(raised_error=data)
@@ -176,7 +167,7 @@ class Client:
         data['time_taken'] = (time.time() - start_time) * 1000
         return data
 
-    async def get_server_info(self, serverid: int):
+    async def get_server_info(self, serverid: int) -> [errors.HTTPException, dict]:
         """
         Get a server listed on discordextremelist.xyz
 
@@ -188,9 +179,6 @@ class Client:
         r = await self.session.get(self.baseurl + "server/{0}".format(serverid))
         await self._response(r)
 
-        if self.hit_ratelimit:
-            await self.ratelimit(response=r)
-
         data = json.loads(await r.text())
         if data['error']:
             raise errors.HTTPException(raised_error=data)
@@ -198,7 +186,7 @@ class Client:
         data['time_taken'] = (time.time() - start_time) * 1000
         return data
 
-    async def get_template_info(self, templateid: str):
+    async def get_template_info(self, templateid: str) -> [errors.HTTPException, dict]:
         """
         Get a template listed on discordextremelist.xyz
 
@@ -210,9 +198,6 @@ class Client:
         r = await self.session.get(self.baseurl + "template/{0}".format(templateid))
         await self._response(r)
 
-        if self.hit_ratelimit:
-            await self.ratelimit(response=r)
-
         data = json.loads(await r.text())
         if data['error']:
             raise errors.HTTPException(raised_error=data)
@@ -220,7 +205,7 @@ class Client:
         data['time_taken'] = (time.time() - start_time) * 1000
         return data
 
-    async def get_user_info(self, userid: str):
+    async def get_user_info(self, userid: str) -> [errors.HTTPException, dict]:
         """
         Get a registered user on discordextremelist.xyz
 
@@ -231,9 +216,6 @@ class Client:
         start_time = time.time()
         r = await self.session.get(self.baseurl + "user/{0}".format(userid))
         await self._response(r)
-
-        if self.hit_ratelimit:
-            await self.ratelimit(response=r)
 
         data = json.loads(await r.text())
         if data['error']:
