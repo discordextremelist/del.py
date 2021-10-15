@@ -1,3 +1,6 @@
+from typing import Optional
+
+
 class DELpy(Exception):
     """
     Raise this so people could easily catch the exception
@@ -12,11 +15,11 @@ class HTTPException(DELpy):
     def __init__(self, *args, **kwargs):
         self.raised_error = kwargs.get('raised_error', None)
         if isinstance(self.raised_error, dict):
-            self.status = self.raised_error.get('status', 0)
-            self.message = self.raised_error.get('message', '')
+            self.status: int = self.raised_error.get('status', 0)
+            self.message: Optional[str] = self.raised_error.get('message', '')
         else:
-            self.message = self.raised_error
-            self.status = kwargs.get('status', None)
+            self.message: dict = self.raised_error
+            self.status: Optional[int] = kwargs.get('status', None)
 
         err = f"Status code: {self.status} --> {self.message}"
         super().__init__(err)
